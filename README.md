@@ -1,16 +1,6 @@
-# cep_brasil
+# CEP Brasil - Consulta de CEP usando a API VIA CEP
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="images/app.gif">
+ 
+### Show some :heart: and star the repo to support the project or :smile:[Follow Me](https://github.com/shinodalabs).Thanks!
+[![GitHub stars](https://img.shields.io/github/stars/shinoda-labs/cep-brasil.svg?style=social&label=Star)](https://github.com/MarcioQuimbundo/flutter_card_wallet) [![GitHub forks](https://img.shields.io/github/forks/shinoda-labs/cep-brasil.svg?style=social&label=Fork)](https://github.com/MarcioQuimbundo/flutter_card_wallet/fork) [![GitHub watchers](https://img.shields.io/github/watchers/shinoda-labs/cep-brasil.svg?style=social&label=Watch)](https://github.com/MarcioQuimbundo/flutter_card_wallet) [![GitHub followers](https://img.shields.io/github/followers/shinoda-labs.svg?style=social&label=Follow)](https://github.com/shinoda-labs/)  
