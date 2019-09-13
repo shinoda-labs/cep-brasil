@@ -1,3 +1,4 @@
+import 'package:cep_brasil/api/cep_api.dart';
 import 'package:flutter/material.dart';
 import 'package:cep_brasil/tabs/consultar.dart';
 import 'package:cep_brasil/tabs/historico.dart';
@@ -8,6 +9,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+  String _result;
   TabController _tabController;
   TextEditingController _controller = TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -16,6 +18,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     _tabController = new TabController(length: 2, vsync: this);
     super.initState();
+  }
+
+  Future _searchCep() async {
+
+    final result = await CepApi.fetchCep(cep: _controller.text);
+    print(result.toJson()); // Exibindo somente a localidade no terminal
+
+    setState(() {
+      _result = result.toJson();
+    });
   }
 
   @override
@@ -59,6 +71,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               content: Text('CEP inválido'),
               duration: Duration(seconds: 3),
             ));
+          } else {
+            _searchCep();
           }
         },
       ),
