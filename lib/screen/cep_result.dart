@@ -2,6 +2,7 @@ import 'package:cep_brasil/api/cep_api.dart';
 import 'package:cep_brasil/models/cep.dart';
 import 'package:cep_brasil/utils/CepArguments.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -13,11 +14,7 @@ class CepResult extends StatefulWidget {
 class _CepResultState extends State<CepResult> {
   CepArguments result;
   Completer<GoogleMapController> _controller = Completer();
-
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
+  CameraPosition _kGooglePlex;
 
   Future _searchCep() async {
     return await CepApi.fetchCep(cep: result.cep);
@@ -26,15 +23,26 @@ class _CepResultState extends State<CepResult> {
   Widget _tileCep(String title, String subtitle, IconData icon) {
     return ListTile(
         title: Text(title),
-        subtitle: Text(subtitle.isNotEmpty ? subtitle : 'Sem dados'),
+        subtitle: Text(subtitle != null ? subtitle : 'Sem dados'),
         leading: Icon(icon, color: Colors.green));
+  }
+
+  void setMapLocation(String logradouro, String bairro, String localidade, String uf) async {
+    final query = '$logradouro, $bairro, $localidade, $uf';
+    var addresses = await Geocoder.local.findAddressesFromQuery(query);
+    var first = addresses.first;
+    setState(() {
+      _kGooglePlex = CameraPosition(
+        target: LatLng(first.coordinates.latitude, first.coordinates.longitude),
+        zoom: 14.4746,
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     setState(() {
       result = ModalRoute.of(context).settings.arguments;
-      print(result);
     });
     return Scaffold(
       appBar: AppBar(
@@ -42,7 +50,7 @@ class _CepResultState extends State<CepResult> {
         centerTitle: true,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.map, color: Colors.white),
+            icon: Icon(Icons.save, color: Colors.white),
             onPressed: () {},
           )
         ],
@@ -52,12 +60,13 @@ class _CepResultState extends State<CepResult> {
         builder: (context, snapshot) {
           Cep cep = snapshot.data;
           if (snapshot.hasData) {
+            setMapLocation(cep.logradouro, cep.bairro, cep.localidade, cep.uf);
             return Stack(
               alignment: Alignment.bottomCenter,
               children: <Widget>[
                 GoogleMap(
                   mapType: MapType.normal,
-                  initialCameraPosition: _kGooglePlex,
+                  initialCameraPosition: _kGooglePlex ?? _kGooglePlex,
                   onMapCreated: (GoogleMapController controller) {
                     _controller.complete(controller);
                   },
@@ -81,15 +90,12 @@ class _CepResultState extends State<CepResult> {
                   child: SafeArea(
                     child: Column(
                       children: <Widget>[
-                        _tileCep('Endereço', cep.logradouro,
-                            Icons.location_on),
+                        _tileCep('Endereço', cep.logradouro, Icons.location_on),
                         _tileCep('Complemento', cep.complemento,
                             Icons.collections_bookmark),
                         _tileCep('Bairro', cep.bairro, Icons.explore),
-                        _tileCep('Cidade', cep.localidade,
-                            Icons.location_city),
-                        _tileCep(
-                            'UF', cep.uf, Icons.location_searching)
+                        _tileCep('Cidade', cep.localidade, Icons.location_city),
+                        _tileCep('UF', cep.uf, Icons.location_searching)
                       ],
                     ),
                   ),
@@ -110,4 +116,5 @@ class _CepResultState extends State<CepResult> {
       ),
     );
   }
+
 }

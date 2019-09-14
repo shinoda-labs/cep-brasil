@@ -25,7 +25,8 @@ dependencies:
   cupertino_icons: ^0.1.2
   http: ^0.12.0
   google_maps_flutter: ^0.5.21
-  flutter_launcher_icons: "^0.7.0"
+  flutter_launcher_icons: ^0.7.0
+  geocoder: ^0.2.1
 
 flutter_icons:
   ios: true
