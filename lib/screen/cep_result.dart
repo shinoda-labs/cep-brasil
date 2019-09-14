@@ -26,7 +26,7 @@ class _CepResultState extends State<CepResult> {
   Widget _tileCep(String title, String subtitle, IconData icon) {
     return ListTile(
         title: Text(title),
-        subtitle: Text(!subtitle.isEmpty ? subtitle : 'Sem dados'),
+        subtitle: Text(subtitle.isNotEmpty ? subtitle : 'Sem dados'),
         leading: Icon(icon, color: Colors.green));
   }
 
