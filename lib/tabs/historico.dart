@@ -6,7 +6,7 @@ class Historico extends StatelessWidget {
     return Container(
       color: Colors.white,
       child: Center(
-        child: Text('Histórico'),
+        child: CircularProgressIndicator(backgroundColor: Colors.green)
       ),
     );
   }
