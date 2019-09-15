@@ -51,7 +51,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ),
       body: TabBarView(
         controller: _tabController,
-        children: <Widget>[Consultar(), Historico()],
+        children: <Widget>[Consultar(_scaffoldKey), Historico()],
       ),
     );
   }

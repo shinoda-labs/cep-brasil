@@ -3,6 +3,10 @@ import 'package:cep_brasil/utils/CepArguments.dart';
 import 'package:flutter/material.dart';
 
 class Consultar extends StatelessWidget {
+  GlobalKey<ScaffoldState> scaffoldKey;
+
+  Consultar(this.scaffoldKey);
+
   @override
   Widget build(BuildContext context) {
     TextEditingController _controller = TextEditingController();
@@ -39,10 +43,10 @@ class Consultar extends StatelessWidget {
               height: 60,
               onPressed: () {
                 if (_controller.text.length < 8) {
-                  SnackBar(
+                  scaffoldKey.currentState.showSnackBar(SnackBar(
                     content: Text('CEP inválido'),
                     duration: Duration(seconds: 3),
-                  );
+                  ));
                 } else {
                   Navigator.pushNamed(context, Main.CepResultScreen,
                       arguments: CepArguments(_controller.text));

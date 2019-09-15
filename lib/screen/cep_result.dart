@@ -14,10 +14,7 @@ class CepResult extends StatefulWidget {
 class _CepResultState extends State<CepResult> {
   CepArguments result;
   Completer<GoogleMapController> _controller = Completer();
-  CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(-15.79126248, -47.88365364),
-    zoom: 10,
-  );
+  CameraPosition _kGooglePlex ;
 
   Future _searchCep() async {
     return await CepApi.fetchCep(cep: result.cep);
@@ -69,8 +66,6 @@ class _CepResultState extends State<CepResult> {
               alignment: Alignment.bottomCenter,
               children: <Widget>[
                 Container(
-                  height: MediaQuery.of(context).size.height / 1.5,
-                  alignment: Alignment.topCenter,
                   child: GoogleMap(
                     mapType: MapType.normal,
                     initialCameraPosition: _kGooglePlex ?? _kGooglePlex,
