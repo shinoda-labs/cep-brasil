@@ -1,6 +1,3 @@
-import 'package:cep_brasil/api/cep_api.dart';
-import 'package:cep_brasil/screen/cep_result.dart';
-import 'package:cep_brasil/utils/CepArguments.dart';
 import 'package:flutter/material.dart';
 import 'package:cep_brasil/tabs/consultar.dart';
 import 'package:cep_brasil/tabs/historico.dart';
@@ -13,11 +10,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
-  static const CepResultScreen = '/CepResultScreen';
-  String _result;
-  bool _loading = false;
   TabController _tabController;
-  TextEditingController _controller = TextEditingController();
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
@@ -32,6 +25,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text('CEP Brasil'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.error, color: Colors.white),
+            onPressed: () => Navigator.pushNamed(context, Main.AboutScreen),
+          )
+        ],
         backgroundColor: Colors.green,
         bottomOpacity: 1,
         bottom: TabBar(
@@ -52,10 +51,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ),
       body: TabBarView(
         controller: _tabController,
-        children: <Widget>[
-          Consultar(),
-          Historico()
-        ],
+        children: <Widget>[Consultar(), Historico()],
       ),
     );
   }

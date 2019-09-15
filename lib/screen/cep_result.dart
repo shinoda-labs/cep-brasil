@@ -14,7 +14,10 @@ class CepResult extends StatefulWidget {
 class _CepResultState extends State<CepResult> {
   CepArguments result;
   Completer<GoogleMapController> _controller = Completer();
-  CameraPosition _kGooglePlex;
+  CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(-15.79126248, -47.88365364),
+    zoom: 10,
+  );
 
   Future _searchCep() async {
     return await CepApi.fetchCep(cep: result.cep);
@@ -23,11 +26,12 @@ class _CepResultState extends State<CepResult> {
   Widget _tileCep(String title, String subtitle, IconData icon) {
     return ListTile(
         title: Text(title),
-        subtitle: Text(subtitle != null ? subtitle : 'Sem dados'),
+        subtitle: Text(subtitle != "" ? subtitle : 'Sem dados'),
         leading: Icon(icon, color: Colors.green));
   }
 
-  void setMapLocation(String logradouro, String bairro, String localidade, String uf) async {
+  void setMapLocation(
+      String logradouro, String bairro, String localidade, String uf) async {
     final query = '$logradouro, $bairro, $localidade, $uf';
     var addresses = await Geocoder.local.findAddressesFromQuery(query);
     var first = addresses.first;
@@ -64,12 +68,16 @@ class _CepResultState extends State<CepResult> {
             return Stack(
               alignment: Alignment.bottomCenter,
               children: <Widget>[
-                GoogleMap(
-                  mapType: MapType.normal,
-                  initialCameraPosition: _kGooglePlex ?? _kGooglePlex,
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                  },
+                Container(
+                  height: MediaQuery.of(context).size.height / 1.5,
+                  alignment: Alignment.topCenter,
+                  child: GoogleMap(
+                    mapType: MapType.normal,
+                    initialCameraPosition: _kGooglePlex ?? _kGooglePlex,
+                    onMapCreated: (GoogleMapController controller) {
+                      _controller.complete(controller);
+                    },
+                  ),
                 ),
                 Container(
                   padding: EdgeInsets.all(15),
@@ -87,17 +95,15 @@ class _CepResultState extends State<CepResult> {
                           spreadRadius: 0.05,
                         )
                       ]),
-                  child: SafeArea(
-                    child: Column(
-                      children: <Widget>[
-                        _tileCep('Endereço', cep.logradouro, Icons.location_on),
-                        _tileCep('Complemento', cep.complemento,
-                            Icons.collections_bookmark),
-                        _tileCep('Bairro', cep.bairro, Icons.explore),
-                        _tileCep('Cidade', cep.localidade, Icons.location_city),
-                        _tileCep('UF', cep.uf, Icons.location_searching)
-                      ],
-                    ),
+                  child: Column(
+                    children: <Widget>[
+                      _tileCep('Endereço', cep.logradouro, Icons.location_on),
+                      _tileCep('Complemento', cep.complemento,
+                          Icons.collections_bookmark),
+                      _tileCep('Bairro', cep.bairro, Icons.explore),
+                      _tileCep('Cidade', cep.localidade, Icons.location_city),
+                      _tileCep('UF', cep.uf, Icons.location_searching)
+                    ],
                   ),
                 )
               ],
@@ -116,5 +122,4 @@ class _CepResultState extends State<CepResult> {
       ),
     );
   }
-
 }
